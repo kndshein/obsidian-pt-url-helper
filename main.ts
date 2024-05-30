@@ -47,8 +47,12 @@ export default class MyPlugin extends Plugin {
 	};
 
 	async onload() {
+		console.log("Loading pt-url-obsidian-plugin");
 		this.app.workspace.on("editor-paste", this.pasteHandler);
 	}
 
-	onunload() {}
+	onunload() {
+		console.log("Un-loading pt-url-obsidian-plugin");
+		this.app.workspace.off("editor-paste", this.pasteHandler);
+	}
 }

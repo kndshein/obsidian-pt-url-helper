@@ -3,29 +3,35 @@ import { URL } from "url";
 
 export default class MyPlugin extends Plugin {
 	pasteHandler = (event: ClipboardEvent, editor: Editor) => {
-		let clipboard_text: string;
+		// This prevents clashing w/ [Paste URL into selection](https://github.com/denolehov/obsidian-url-into-selection).
+		//TODO: Future work may be to add ability to override existing text manipulation scripts w/ a setting toggle
+		if (editor.somethingSelected()) {
+			console.log("Selected text detected, default behavior is used.");
+			return;
+		}
 
+		let clipboard_text: string;
 		if (!event.clipboardData) {
 			console.error("Empty `clipboardData`");
 			return;
 		} else {
 			clipboard_text = event.clipboardData.getData("text");
 		}
-
 		if (!clipboard_text) return;
 
 		let url: URL;
+		// Check if the URL is valid
 		try {
 			url = new URL(clipboard_text);
 		} catch {
 			console.log("Clipboard pasted; it was not a PT link.");
 			return;
 		}
-
 		if (url.host != "www.pivotaltracker.com") {
 			console.log("URL is not PT");
 			return;
 		}
+
 		const story_regex = /(?<=\/story\/show\/)[0-9]+(?=\/||$)/g;
 		const story_ids = clipboard_text.match(story_regex);
 		if (!story_ids || story_ids.length > 1) {
@@ -34,6 +40,7 @@ export default class MyPlugin extends Plugin {
 		}
 		const story_id_tag = `#${story_ids[0]}`;
 
+		// Prevent pasting since this script will write the string
 		event.preventDefault();
 
 		const formatted_text = `[${story_id_tag}](${clipboard_text})`;

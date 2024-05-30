@@ -1,15 +1,7 @@
 import { Editor, Notice, Plugin } from "obsidian";
 import { URL } from "url";
 
-// Remember to rename these classes and interfaces!
-
-interface MyPluginSettings {
-	mySetting: string;
-}
-
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
-
 	pasteHandler = (event: ClipboardEvent, editor: Editor) => {
 		let clipboard_text: string;
 
@@ -56,13 +48,13 @@ export default class MyPlugin extends Plugin {
 		new Notice(`Formatted PT link for: ${story_id_tag}`);
 	};
 
-	async onload() {
-		console.log("Loading pt-url-obsidian-plugin");
+	onload() {
+		console.log(`Loading ${this.manifest.id}`);
 		this.app.workspace.on("editor-paste", this.pasteHandler);
 	}
 
 	onunload() {
-		console.log("Un-loading pt-url-obsidian-plugin");
+		console.log(`Un-loading ${this.manifest.id}`);
 		this.app.workspace.off("editor-paste", this.pasteHandler);
 	}
 }

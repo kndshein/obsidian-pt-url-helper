@@ -1,6 +1,6 @@
 # Pivotal Tracker URL Helper
 
-When pasting pivotal tracker story links, a formatted hyperlink will be created w/ the story number as the text.
+An Obsidian plugin that aids w/ pasting [Pivotal Tracker](https://www.pivotaltracker.com) (PT) stories. When pasting PT story links, a formatted hyperlink will be created w/ the story number as the text.
 
 Pasting `https://www.pivotaltracker.com/story/show/123456789` will become `[#123456789](https://www.pivotaltracker.com/story/show/123456789)`, which would render as `#123456789`.
 

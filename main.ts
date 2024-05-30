@@ -1,7 +1,7 @@
 import { Editor, Notice, Plugin } from "obsidian";
 import { URL } from "url";
 
-export default class MyPlugin extends Plugin {
+export default class PtUrlHelperPlugin extends Plugin {
 	pasteHandler = (event: ClipboardEvent, editor: Editor) => {
 		// This prevents clashing w/ [Paste URL into selection](https://github.com/denolehov/obsidian-url-into-selection).
 		//TODO: Future work may be to add ability to override existing text manipulation scripts w/ a setting toggle

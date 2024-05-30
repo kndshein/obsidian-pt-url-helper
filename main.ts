@@ -6,7 +6,7 @@ export default class PtUrlHelperPlugin extends Plugin {
 		// This prevents clashing w/ [Paste URL into selection](https://github.com/denolehov/obsidian-url-into-selection).
 		//TODO: Future work may be to add ability to override existing text manipulation scripts w/ a setting toggle
 		if (editor.somethingSelected()) {
-			console.log("Selected text detected, default behavior is used.");
+			console.debug("Selected text detected, default behavior is used.");
 			return;
 		}
 
@@ -24,11 +24,11 @@ export default class PtUrlHelperPlugin extends Plugin {
 		try {
 			url = new URL(clipboard_text);
 		} catch {
-			console.log("Clipboard pasted; it was not a PT link.");
+			console.debug("Clipboard pasted; it was not a PT link.");
 			return;
 		}
 		if (url.host != "www.pivotaltracker.com") {
-			console.log("URL is not PT");
+			console.debug("URL is not PT");
 			return;
 		}
 
@@ -56,12 +56,12 @@ export default class PtUrlHelperPlugin extends Plugin {
 	};
 
 	onload() {
-		console.log(`Loading ${this.manifest.id}`);
+		console.debug(`Loading ${this.manifest.id}`);
 		this.app.workspace.on("editor-paste", this.pasteHandler);
 	}
 
 	onunload() {
-		console.log(`Un-loading ${this.manifest.id}`);
+		console.debug(`Un-loading ${this.manifest.id}`);
 		this.app.workspace.off("editor-paste", this.pasteHandler);
 	}
 }

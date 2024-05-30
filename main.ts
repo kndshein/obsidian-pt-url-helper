@@ -45,10 +45,14 @@ export default class MyPlugin extends Plugin {
 		//TODO: check for if valid PT story link
 		event.preventDefault();
 
-		editor.replaceRange(
-			`[#${story_ids[0]}](${clipboard_text})`,
-			editor.getCursor()
-		);
+		const formatted_text = `[#${story_ids[0]}](${clipboard_text})`;
+		const curr_cursor = editor.getCursor();
+
+		editor.replaceRange(formatted_text, curr_cursor);
+		editor.setCursor({
+			line: curr_cursor.line,
+			ch: curr_cursor.ch + formatted_text.length,
+		});
 
 		console.log("Pasted!");
 		console.log(event);

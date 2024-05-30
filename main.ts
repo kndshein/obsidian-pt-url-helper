@@ -36,10 +36,19 @@ export default class MyPlugin extends Plugin {
 
 		const story_regex = /(?<=\/story\/show\/)[0-9]+(?=\/||$)/g;
 		const story_ids = clipboard_text.match(story_regex);
+		//TODO: make sure it's a PT link
 		if (!story_ids || story_ids.length > 1) {
 			console.error("Multiple matches or none found for story id");
 			return;
 		}
+
+		//TODO: check for if valid PT story link
+		event.preventDefault();
+
+		editor.replaceRange(
+			`[#${story_ids[0]}](${clipboard_text})`,
+			editor.getCursor()
+		);
 
 		console.log("Pasted!");
 		console.log(event);

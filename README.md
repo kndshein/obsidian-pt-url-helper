@@ -15,3 +15,4 @@ Pasting `https://www.pivotaltracker.com/story/show/123456789` will become `[#123
 -   Adding a setting toggle to disable `#` prefix.
 -   Allow pasting into selected text, simply replacing the selection with the formatted hyperlink.
     -   The main issue for this work is that I'm currently unsure how to override the behavior of other plugins that mutate selected texts.
+-   Integrate w/ PT for the latest status of the story, and indicate that in the link.

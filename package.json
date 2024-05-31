@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-pt-url-helper",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Obsidian plugin that formats Pivotal Tracker story links on paste.",
 	"main": "main.js",
 	"scripts": {

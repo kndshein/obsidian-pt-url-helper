@@ -32,13 +32,16 @@ export default class PtUrlHelperPlugin extends Plugin {
 			return;
 		}
 
-		const story_regex = /(?<=\/story\/show\/)[0-9]+(?=\/||$)/g;
+		// Wanted to use /(?<=\/story\/show\/)[0-9]+(?=\/||$)/g but iOS doesn't support lookbehinds (https://github.com/obsidianmd/obsidian-releases/pull/3609#issuecomment-2141184314)
+		// Regex is the bane of my existence and a source of shame
+		// Apologies for the code below...
+		const story_regex = /\/story\/show\/(\d+)/g;
 		const story_ids = clipboard_text.match(story_regex);
 		if (!story_ids || story_ids.length > 1) {
 			console.error("Multiple matches or none found for story id");
 			return;
 		}
-		const story_id_tag = `#${story_ids[0]}`;
+		const story_id_tag = `#${story_ids[0].replace("/story/show/", "")}`;
 
 		// Prevent pasting since this script will write the string
 		event.preventDefault();

@@ -6,13 +6,15 @@ export default class PtUrlHelperPlugin extends Plugin {
 		// This prevents clashing w/ [Paste URL into selection](https://github.com/denolehov/obsidian-url-into-selection).
 		//TODO: Future work may be to add ability to override existing text manipulation scripts w/ a setting toggle
 		if (editor.somethingSelected()) {
-			console.debug("Selected text detected, default behavior is used.");
+			logConsoleInDev(
+				"Selected text detected, default behavior is used."
+			);
 			return;
 		}
 
 		let clipboard_text: string;
 		if (!event.clipboardData) {
-			console.error("Empty `clipboardData`");
+			logConsoleInDev("Empty `clipboardData` on paste");
 			return;
 		} else {
 			clipboard_text = event.clipboardData.getData("text");
@@ -24,21 +26,27 @@ export default class PtUrlHelperPlugin extends Plugin {
 		try {
 			url = new URL(clipboard_text);
 		} catch {
-			console.debug("Clipboard pasted; it was not a PT link.");
+			logConsoleInDev("Clipboard pasted; it was not a PT link.");
 			return;
 		}
 		if (url.host != "www.pivotaltracker.com") {
-			console.debug("URL is not PT");
+			logConsoleInDev("URL is not of Pivotal Tracker's");
 			return;
 		}
 
 		// Wanted to use /(?<=\/story\/show\/)[0-9]+(?=\/||$)/g but iOS doesn't support lookbehinds (https://github.com/obsidianmd/obsidian-releases/pull/3609#issuecomment-2141184314)
 		// Regex is the bane of my existence and a source of shame
 		// Apologies for the code below...
+		if (!clipboard_text.includes("/story/show/")) {
+			logConsoleInDev("PT link is not of a story.");
+			return;
+		}
 		const story_regex = /\/story\/show\/(\d+)/g;
 		const story_ids = clipboard_text.match(story_regex);
 		if (!story_ids || story_ids.length > 1) {
-			console.error("Multiple matches or none found for story id");
+			new Notice(
+				`Multiple story ids or none found for pasted link: ${clipboard_text}`
+			);
 			return;
 		}
 		const story_id_tag = `#${story_ids[0].replace("/story/show/", "")}`;
@@ -59,12 +67,16 @@ export default class PtUrlHelperPlugin extends Plugin {
 	};
 
 	onload() {
-		console.debug(`Loading ${this.manifest.id}`);
+		console.log(`Loading ${this.manifest.id}`);
 		this.app.workspace.on("editor-paste", this.pasteHandler);
 	}
 
 	onunload() {
-		console.debug(`Un-loading ${this.manifest.id}`);
+		console.log(`Un-loading ${this.manifest.id}`);
 		this.app.workspace.off("editor-paste", this.pasteHandler);
 	}
+}
+
+function logConsoleInDev(message: string) {
+	if (process.env.NODE_ENV == "development") console.log(message);
 }

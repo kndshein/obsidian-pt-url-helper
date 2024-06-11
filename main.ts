@@ -26,7 +26,7 @@ export default class PtUrlHelperPlugin extends Plugin {
 		try {
 			url = new URL(clipboard_text);
 		} catch {
-			logConsoleInDev("Clipboard pasted; it was not a PT link.");
+			logConsoleInDev("Clipboard pasted; it was not a valid URL.");
 			return;
 		}
 		if (url.host != "www.pivotaltracker.com") {
